@@ -1,0 +1,8 @@
+numpy
+requests
+firecrawl
+groq
+tiktoken
+reportlab
+fastapi
+pydantic
