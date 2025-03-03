@@ -98,4 +98,3 @@ def make_vapi_call(name, number):
     except Exception as e:
         print(e)
         return {"error": str(e)}
-make_vapi_call("sidd","+917300608902")
