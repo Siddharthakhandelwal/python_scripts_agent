@@ -10,7 +10,7 @@ from real_state import state
 
 app = FastAPI(title="VAPI Call API", description="API for making automated voice calls")
 
-# Add CORS middleware to allow cross-origin requests
+# Add CORS middleware to allow cross-orig in requests
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allows all origins
