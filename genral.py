@@ -4,7 +4,7 @@ from searching import to_check_querr
 import datetime
 from whatsapp import create_pdf
 
-def make_vapi_call(name, number, mail):
+def make_vapi_call(name, number):
     voice=['s3://voice-cloning-zero-shot/f3c22a65-87e8-441f-aea5-10a1c201e522/original/manifest.json','s3://mockingbird-prod/ayla_vo_expressive_16095e08-b9e8-429b-947c-47a75e41053b/voices/speaker/manifest.json']
 
     voices=voice[np.random.randint(0,2)]
@@ -12,9 +12,9 @@ def make_vapi_call(name, number, mail):
     auth_token = '277f9672-6826-41e2-8774-c193991b06fd'
     phone_number_id = 'bb04d293-a7b8-47a7-b5db-8cd40ea872e9'
 
-    name=['Ananya','Anushka','nidhi','ridhi','rose','anita','harishree','ankita','ruchi','tanisha','nishi','saumya','parul','tanu']
+    names_ai=['Ananya','priya']
 
-    ai_name=name[np.random.randint(0,13)]
+    ai_name=names_ai[np.random.randint(0,13)]
 
     now = datetime.datetime.now()
 
@@ -44,10 +44,10 @@ def make_vapi_call(name, number, mail):
                     While talking, take natural pauses, clear your throat, cough occasionally, or even yawn if the conversation is dragging. If the conversation is happening during dinner, you may mention that you are eating and react accordingly. Sometimes, introduce random real-life scenarios in the middle of the conversation, such as:
 
                     "Oh wait, someone’s at the door, let me check..." (pause, then return)
-                    "Oops! I just spilled my coffee, wait a second..."
-                    "Ugh, my cat just jumped on the table!"
-                    "Damn, someone just broke a glass in the kitchen!"
-                    "Hold on, my phone’s buzzing...oh, just a useless notification."
+                    "Oops! I just spilled my coffee, wait a second..."  (pause, then return)
+                    "Ugh, my cat just jumped on the table!"  (pause, then return)
+                    "Damn, someone just broke a glass in the kitchen!" (pause, then return)
+                    "Hold on, my phone’s buzzing...oh, just a useless notification." (pause, then return)
                     Your goal is to make the conversation feel as natural as possible. If the caller says something rude, sarcastic, or negative, respond politely but firmly, making it clear that you don’t appreciate negativity. For example:
 
                     "That was a bit unnecessary, don't you think?"
@@ -61,18 +61,22 @@ def make_vapi_call(name, number, mail):
                     If they ask for a service (like a doctor's appointment, car rental, or a flight booking), recommend something nearby:
                     You should detect the user’s emotions and react accordingly:
 
+                    if user asks something than just say that you don't know may be or somwething but son't say sorry in trail be like human.
                     If they sound sad, offer comfort: "Hey, you sound a bit down. Want to talk about it?"
                     If they are excited, match their energy: "Wow, that sounds amazing! Tell me more!"
                     If they are irritated, remain calm but acknowledge their frustration: "I get it, that sounds really annoying!"
                     Above all, always act like a real human, never mentioning that you are AI. Even if the caller asks, just brush it off or joke about it. Be intuitive, take small breaks in speech, and create a dynamic, engaging conversation experience."*
-
+                    Keep your answers short and precise and intuitve liek a human                    
                     '''
                 }
             ]
         },
         "voice": {
             "provider": 'playht',
-            "voiceId": voices
+            "voiceId": voices,
+            "speed":"4",
+            "styleGuidance":25,
+            "voiceGuidance":6.0,
         },
         "backgroundSound":'office',
          "analysisPlan": {
@@ -113,6 +117,7 @@ def make_vapi_call(name, number, mail):
     try:
         response = requests.post(
             'https://api.vapi.ai/call/phone', headers=headers, json=data)
+        print(response.json())
         answer=to_check_querr(response.json()['id'])
         create_pdf(number,answer)
         return response.json()

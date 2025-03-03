@@ -20,8 +20,8 @@ def create_pdf(number,text, filename="output.pdf"):
     c.drawString(100, 750, text)  
     c.save()
     print(f"PDF created successfully: {filename}")
-    send_message(number,"output.pdf")
+    send_message(number[1:],"output.pdf")
 
-create_pdf(917300608902,"hello i am siddhartha")
+
 
 
