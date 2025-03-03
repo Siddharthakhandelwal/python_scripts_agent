@@ -2,9 +2,9 @@ firecrawl
 groq
 tiktoken
 reportlab
-fastapi==0.109.0
-uvicorn==0.27.0
-pydantic==2.5.2
-requests==2.31.0
-numpy==1.24.3
-python-multipart==0.0.6
+fastapi
+uvicorn
+pydantic
+requests
+numpy
+python-multipart
