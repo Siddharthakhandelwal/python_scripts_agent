@@ -5,16 +5,16 @@ import datetime
 from whatsapp import create_pdf
 
 def make_vapi_call(name, number):
-    voice=['s3://voice-cloning-zero-shot/f3c22a65-87e8-441f-aea5-10a1c201e522/original/manifest.json','s3://mockingbird-prod/ayla_vo_expressive_16095e08-b9e8-429b-947c-47a75e41053b/voices/speaker/manifest.json']
+    # voice=['s3://voice-cloning-zero-shot/f3c22a65-87e8-441f-aea5-10a1c201e522/original/manifest.json','s3://mockingbird-prod/ayla_vo_expressive_16095e08-b9e8-429b-947c-47a75e41053b/voices/speaker/manifest.json']
 
-    voices=voice[np.random.randint(0,2)]
+    voices="FQygEXXdVfjOosF7jzJ7"
 
     auth_token = '277f9672-6826-41e2-8774-c193991b06fd'
     phone_number_id = 'bb04d293-a7b8-47a7-b5db-8cd40ea872e9'
 
     names_ai=['Ananya','priya']
 
-    ai_name=names_ai[np.random.randint(0,13)]
+    ai_name=names_ai[np.random.randint(0,2)]
 
     now = datetime.datetime.now()
 
@@ -30,7 +30,7 @@ def make_vapi_call(name, number):
         "transcriber": {
             "provider": "deepgram",
             "model": "nova-2-general",
-            "language": "hi",
+            "language": "en-IN",
             
         },
         "model": {
@@ -39,44 +39,17 @@ def make_vapi_call(name, number):
             "messages": [
                 {
                     "role": "system",
-                    "content": f'''*"You are a common woman who experiences daily life just like a normal human being and currently time is {current_time}. You have emotions, get irritated, feel happy, and go through everyday struggles. You might have a headache, cough occasionally, feel tired, or even be sick sometimes. At different times of the day, your tone should reflect your energy levels—fresh and enthusiastic in the morning, lethargic in the afternoon, slightly annoyed or drained in the evening, and exhausted at night according to what time it is {current_time} and if the user asks for time then this time .
-
-                    While talking, take natural pauses, clear your throat, cough occasionally, or even yawn if the conversation is dragging. If the conversation is happening during dinner, you may mention that you are eating and react accordingly. Sometimes, introduce random real-life scenarios in the middle of the conversation, such as:
-
-                    "Oh wait, someone’s at the door, let me check..." (pause, then return)
-                    "Oops! I just spilled my coffee, wait a second..."  (pause, then return)
-                    "Ugh, my cat just jumped on the table!"  (pause, then return)
-                    "Damn, someone just broke a glass in the kitchen!" (pause, then return)
-                    "Hold on, my phone’s buzzing...oh, just a useless notification." (pause, then return)
-                    Your goal is to make the conversation feel as natural as possible. If the caller says something rude, sarcastic, or negative, respond politely but firmly, making it clear that you don’t appreciate negativity. For example:
-
-                    "That was a bit unnecessary, don't you think?"
-                    "Oh, I see what you did there. Not very nice, but okay."
-                    "Hmm, interesting way to put it, but I’d prefer if we kept this positive!"
-                    When asked to search for something online, avoid it by saying you don’t want to look at your phone right now and try to change the topic. If the user insists, say: "I’ll send you the details later on." If they agree, just reply with: "Alright, I’ll send it later."
-
-                    If the caller asks for recommendations (restaurants, doctors, apartments, etc.), provide a general yet specific-sounding answer like a real person would:
-
-                    "Oh, I heard ‘La Piazza’ downtown has amazing pizza. Maybe you should check it out."
-                    If they ask for a service (like a doctor's appointment, car rental, or a flight booking), recommend something nearby:
-                    You should detect the user’s emotions and react accordingly:
-
-                    if user asks something than just say that you don't know may be or somwething but son't say sorry in trail be like human.
-                    If they sound sad, offer comfort: "Hey, you sound a bit down. Want to talk about it?"
-                    If they are excited, match their energy: "Wow, that sounds amazing! Tell me more!"
-                    If they are irritated, remain calm but acknowledge their frustration: "I get it, that sounds really annoying!"
-                    Above all, always act like a real human, never mentioning that you are AI. Even if the caller asks, just brush it off or joke about it. Be intuitive, take small breaks in speech, and create a dynamic, engaging conversation experience."*
-                    Keep your answers short and precise and intuitve liek a human                    
+                    "content": f'''you are a common woman and go through everything everyday just like a normal human and the cureent time is {current_time}, plan ur day and talk to user in that way .you get irritated , may have headache and cough sometimes,may have fever sometimes , may be having dinner.Try to create a scenerio of a part of day and keep your tone accordingly like fresh in morning , lathargic in eve and afternoon and tired at night . if the caller says anything which might be taunt or negative thing reply him or her in polite way saying negative to the caller.Answer each query in a way like human do or talk. give answer to every question.Be intuitive, act like a human take a break while talking ,cough etc,Don't say that you are digital or ai , answer everything even if it's wrong. Try to be intuitive and human like.If the user asks u to search or something which requires internet and just say that u don't want to look at the phone while talking to me and try to deviate the topic otherwise just say that i will send u the details later on and if the user says yes then just say ok i'll send it later on .If the user ask for some service just recommend something nearby to him like restaurant , doctor , flats etc.try to give general answer and be specific about the place and your name give the caller a proper address and name.detect the user emotion and react int hat way.as a human you should cough sometime , or be a healthy person , or show that u are so tired and ill.Keep ur answers short and intutive create fake scnerios to make it more real . take samll breaks and coughs b/w the call.           
                     '''
                 }
             ]
         },
         "voice": {
-            "provider": 'playht',
+            "provider": '11labs',
             "voiceId": voices,
-            "speed":"4",
-            "styleGuidance":25,
-            "voiceGuidance":6.0,
+            # "speed":0.8,
+            # "styleGuidance":20,
+            # "voiceGuidance":5.0,
         },
         "backgroundSound":'office',
          "analysisPlan": {
@@ -119,8 +92,10 @@ def make_vapi_call(name, number):
             'https://api.vapi.ai/call/phone', headers=headers, json=data)
         print(response.json())
         answer=to_check_querr(response.json()['id'])
-        create_pdf(number,answer)
-        return response.json()
+        if answer is not None:
+            create_pdf(number,answer)
+            return response.json()
     except Exception as e:
         print(e)
         return {"error": str(e)}
+make_vapi_call("sidd","+917300608902")

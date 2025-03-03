@@ -17,7 +17,7 @@ def groq_trans_querr(trans):
             },
             {
                 "role": "user",
-                "content": f"you have this {trans} , you need to just return a question which user asked and required internet connection to answer just return them",
+                "content": f"you have this {trans} ,analyze the transcript and just return the question or querry that user asked and my answer was that i'll send hium later on. you need to just return a question which user asked and required internet connection to answer just return them and if there is no actual querry then return none .",
             }
         ],
 
@@ -106,8 +106,13 @@ def to_check_querr(call_id):
       try:
         transcript= trans['transcript']
         querry = groq_trans_querr(transcript) # type: ignore
-        answer=crawl_web(querry)
-        return answer
+        if querry != "None":
+            try:
+                answer=crawl_web(querry)
+                return answer
+            except Exception as e:
+               return None
+        return None
       except Exception as e:
          print(f"An error occurred: {e}")
          return "Error occurred"
