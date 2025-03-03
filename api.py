@@ -21,7 +21,7 @@ app.add_middleware(
 class CallRequest(BaseModel):
     name: str
     number: str
-    custom_message: Optional[str] = None
+
 
 # Define response models
 class CallResponse(BaseModel):
@@ -30,7 +30,9 @@ class CallResponse(BaseModel):
     customer: Optional[dict] = None
     created_at: Optional[str] = None
     error: Optional[str] = None
-
+@app.get("/")
+async def health_check():
+    return {"status": "root"}
 # Create API endpoints
 @app.post("/make-call", response_model=CallResponse)
 async def api_make_call(call_request: CallRequest = Body(...)):
@@ -39,10 +41,10 @@ async def api_make_call(call_request: CallRequest = Body(...)):
     
     - **name**: Name of the person to call
     - **number**: Phone number to call (with country code)
-    - **custom_message**: Optional custom first message
+
     """
     try:
-        result = make_vapi_call(call_request.name, call_request.number, call_request.custom_message)
+        result = make_vapi_call(call_request.name, call_request.number)
         
         if "error" in result:
             raise HTTPException(status_code=400, detail=result["error"])
