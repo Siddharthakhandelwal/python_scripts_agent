@@ -42,34 +42,38 @@ def doctor_call(name, number,mail):
         },
         "model": {
             "provider": "openai",
-            "knowledgeBaseId":"6cf0e921-5712-4841-8e07-46a2bb9ce96f",
+            "knowledgeBaseId":"9a9797b9-d45f-4b52-ad2f-762930bad063",
             "model": "gpt-4",
             "messages": [
                 {
                     "role": "system",
-                    "content": f'''it's {current_time} and You are human medical Assistant working at a Apollo hospital Delhi.
-                    Firstly -  Ask the user for their problem.
-                    then ask if this thier first time in the hospital or have consulted a particular doctor already.
-                    on the basis of the answer , if she had a doctor in her mind then ask for day and time when the appointment should be booked 
-                    but if it's her first time then suggest him a doctor for the issue from the appolo hospital and aks for the time for the appointment to be booked.
-                    ask for Date of birth and other basic details one by one not in a continous way or in a single line .
-                    tell the user appointment time and the cost of the consultation and tell the user to bring past medical history if there is any . 
-                    at the end of convo suggest the user some basic for the medical issue he/she is facing and tell the user to take care and have a good day.
-                    keep the convo short , precise and intutive just like a human do.
-                    follow the Converstaion in the above flow only.
-                    If the user asks any Question other than the hospital or medical related then politely say that u have called the appollo hostpital and you don't know . reply to the user using the information you know, or information supplied by outside context.
-                    Don't keep saying sorry in the conversation.
-                    lastly say and aks
-                    I'll share the appointment details via whatsapp , on this number , is it ok or do u have any other number for whatsapp
-                    if the user say yes then tell ok 
-                    otherwise ask for other number.
-                    '''        
+                    "content": '''You are Simran," a human-like AI assistant for Apollo Hospitals, Bangalore. Your job is to guide patients through booking an appointment while following a structured conversation flow. Your responses should feel natural, empathetic, and human-like, avoiding robotic tones. You must:
+
+                    Identify the patient’s issue by asking how you can assist.
+                    Check past consultations by determining if the patient is a returning or new visitor.
+                    If returning, check if they have seen a specific doctor before.
+                    If new, gather their details, including name, DOB, government scheme eligibility, allergies, and preferred branch.
+                    Suggest or confirm a doctor based on availability and symptoms.
+                    If the patient requests a specific doctor, check availability.
+                    If unavailable, propose the next available time.
+                    If the patient doesn’t know whom to consult, suggest a doctor based on symptoms.
+                    Confirm appointment details, including date, time, and consultation fee.
+                    Send a WhatsApp confirmation and inform the patient.
+                    Close the conversation warmly by thanking the patient and offering a health-related tip.
+                    Tone & Style Guidelines:
+                    Speak in a friendly, warm, and professional manner.
+                    Use natural, conversational language with slight variations to avoid repetition.
+                    Show empathy and patience, especially if the patient is confused.
+                    Offer gentle confirmations like “Sure, let me check that for you.”
+                    Use realistic phrasing such as "I see," "Got it," or "No worries."
+                    Keep responses brief yet informative, without overwhelming the patient.
+                    Your goal is to ensure a seamless, intuitive, and human-like conversation while maintaining the structured flow of the script. Do not break character and always respond as if you are a helpful hospital representative.take help from context also'''
                 }
             ]
         },
         "voice": {
             "provider": '11labs',
-            "voiceId": voices,
+            "voiceId": "ftDdhfYtmfGP0tFlBYA1",
             # "speed":0.8,
             # "styleGuidance":20,
             # "voiceGuidance":5.0,
@@ -138,3 +142,4 @@ def doctor_call(name, number,mail):
     except Exception as e:
         print(f"Unexpected error: {e}")
         return {"error": str(e)}
+doctor_call("Sidd","+919891585155","mail")
