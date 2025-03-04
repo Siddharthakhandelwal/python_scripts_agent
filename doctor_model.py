@@ -1,18 +1,27 @@
+
+
 import requests
 import numpy as np
 from searching import to_check_querr
 import datetime
 from whatsapp import create_pdf
 from send_mail import send_mail
+from datafrmae import add_data
+import pandas as pd
 from send_query_mail import send_mail_querry
+# Initialize the DataFrame with specified columns
+columns = ['Phone number', 'Name', 'authtoken','summary']
+df = pd.DataFrame(columns=columns)
 def doctor_call(name, number,mail):
-   
+    # voice=['s3://voice-cloning-zero-shot/f3c22a65-87e8-441f-aea5-10a1c201e522/original/manifest.json','s3://mockingbird-prod/ayla_vo_expressive_16095e08-b9e8-429b-947c-47a75e41053b/voices/speaker/manifest.json']
+
     voices="FQygEXXdVfjOosF7jzJ7"
 
+    # TODO: Move these to environment variables for better security
     auth_token = '277f9672-6826-41e2-8774-c193991b06fd'
     phone_number_id = 'bb04d293-a7b8-47a7-b5db-8cd40ea872e9'
 
-    names_ai=['Simran','priya']
+    names_ai=['Ananya','priya']
 
     ai_name=names_ai[np.random.randint(0,2)]
 
@@ -30,20 +39,16 @@ def doctor_call(name, number,mail):
         "transcriber": {
             "provider": "deepgram",
             "model": "nova-2-general",
-            "language": "en-IN", 
+            "language": "en-IN",
+            
         },
-        
-        "maxDurationSeconds":2000.0,
-        
         "model": {
             "provider": "openai",
             "model": "gpt-4",
-            "emotionRecognitionEnabled": True,
-            "knowledgeBaseId": "05e786fb-e914-492b-9dfd-523131014f29",
             "messages": [
                 {
                     "role": "system",
-                    "content":f'''it's {current_time} and You are human medical Assistant working at a Apollo hospital Delhi.
+                    "content": f'''it's {current_time} and You are human medical Assistant working at a Apollo hospital Delhi.
                     Firstly -  Ask the user for their problem.
                     then ask if this thier first time in the hospital or have consulted a particular doctor already.
                     on the basis of the answer , if she had a doctor in her mind then ask for day and time when the appointment should be booked 
@@ -60,7 +65,6 @@ def doctor_call(name, number,mail):
                     if the user say yes then tell ok 
                     otherwise ask for other number.
                     '''        
-                    
                 }
             ]
         },
@@ -71,7 +75,7 @@ def doctor_call(name, number,mail):
             # "styleGuidance":20,
             # "voiceGuidance":5.0,
         },
-        "backgroundSound":'off',
+        "backgroundSound":'office',
          "analysisPlan": {
             "summaryPlan": {
                 "messages": [
@@ -110,13 +114,28 @@ def doctor_call(name, number,mail):
     try:
         response = requests.post(
             'https://api.vapi.ai/call/phone', headers=headers, json=data)
-        print(response.json())
-        answer=to_check_querr(response.json()['id'])
-        send_mail(auth_token,mail,"Doctor Transcript",response.json()['id'])
+        
+        response_data = response.json()
+        print(response_data)   
+        call_id = response_data.get('id')
+        print("got the id")
+        print("calling to check querry")
+        answer = to_check_querr(call_id,mail)
+        print("checked querry")
+        print("calling add data")
+        dj=add_data(df, number, name, auth_token, call_id)
+        print(dj)
+
         if answer is not None:
-            send_mail_querry(mail,"Doctor Query",answer)
-            create_pdf(number,answer)
-            return response.json()
+            print("calling send mail")
+            send_mail_querry(mail,"Your Querry is resolved",answer)
+            print("calling create pdf")
+            create_pdf(number, answer)
+            
+        return response_data
+    except requests.RequestException as e:
+        print(f"Request error: {e}")
+        return {"error": f"Network error: {str(e)}"}
     except Exception as e:
-        print(e)
+        print(f"Unexpected error: {e}")
         return {"error": str(e)}

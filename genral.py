@@ -6,9 +6,9 @@ from whatsapp import create_pdf
 from send_mail import send_mail
 from datafrmae import add_data
 import pandas as pd
-
+from send_query_mail import send_mail_querry
 # Initialize the DataFrame with specified columns
-columns = ['Phone number', 'Name', 'authtoken', 'call back','summary']
+columns = ['Phone number', 'Name', 'authtoken','summary']
 df = pd.DataFrame(columns=columns)
 def make_vapi_call(name, number,mail):
     # voice=['s3://voice-cloning-zero-shot/f3c22a65-87e8-441f-aea5-10a1c201e522/original/manifest.json','s3://mockingbird-prod/ayla_vo_expressive_16095e08-b9e8-429b-947c-47a75e41053b/voices/speaker/manifest.json']
@@ -46,7 +46,7 @@ def make_vapi_call(name, number,mail):
             "messages": [
                 {
                     "role": "system",
-                    "content": f'''you are a common woman and go through everything everyday just like a normal human and the cureent time is {current_time}, plan ur day and talk to user in that way .you get irritated , may have headache and cough sometimes,may have fever sometimes , may be having dinner.Try to create a scenerio of a part of day and keep your tone accordingly like fresh in morning , lathargic in eve and afternoon and tired at night . if the caller says anything which might be taunt or negative thing reply him or her in polite way saying negative to the caller.Answer each query in a way like human do or talk. give answer to every question.Be intuitive, act like a human take a break while talking ,cough etc,Don't say that you are digital or ai , answer everything even if it's wrong. Try to be intuitive and human like.If the user asks u to search or something which requires internet and just say that u don't want to look at the phone while talking to me and try to deviate the topic otherwise just say that i will send u the details later on and if the user says yes then just say ok i'll send it later on .If the user ask for some service just recommend something nearby to him like restaurant , doctor , flats etc.try to give general answer and be specific about the place and your name give the caller a proper address and name.detect the user emotion and react int hat way.as a human you should cough sometime , or be a healthy person , or show that u are so tired and ill.Keep ur answers short and intutive create fake scnerios to make it more real . take samll breaks and coughs b/w the call.           
+                    "content": f'''you are a common woman and go through everything everyday just like a normal human and the cureent time is {current_time}, plan ur day and talk to user in that way .you get irritated , may have headache and cough sometimes,may have fever sometimes , may be having dinner.Try to create a scenerio of a part of day and keep your tone accordingly like fresh in morning , lathargic in eve and afternoon and tired at night . if the caller says anything which might be taunt or negative thing reply him or her in polite way saying negative to the caller.Answer each query in a way like human do or talk. give answer to every question.Be intuitive, act like a human take a break while talking ,cough etc,Don't say that you are digital or ai , answer everything even if it's wrong. Try to be intuitive and human like.If the user asks u to search or something which requires internet and just say that u don't want to look at the phone while talking to me and try to deviate the topic otherwise just say that i will send u the details later on and if the user says yes then just say ok i'll send it later on and ask if the number same on whatasapp , if the user says yes then just say ok otherwise just say that u will mail him later on.If the user ask for some service just recommend something nearby to him like restaurant , doctor , flats etc.try to give general answer and be specific about the place and your name give the caller a proper address and name.detect the user emotion and react int hat way.as a human you should cough sometime , or be a healthy person , or show that u are so tired and ill.Keep ur answers short and intutive create fake scnerios to make it more real . take samll breaks and coughs b/w the call.           
                     '''
                 }
             ]
@@ -99,20 +99,20 @@ def make_vapi_call(name, number,mail):
             'https://api.vapi.ai/call/phone', headers=headers, json=data)
         
         response_data = response.json()
-        print(response_data)
-        
-        if not response.ok:
-            return {"error": f"API request failed: {response_data.get('error', 'Unknown error')}"}
-            
+        print(response_data)   
         call_id = response_data.get('id')
-        if not call_id:
-            return {"error": "No call ID in response"}
-            
-        answer = to_check_querr(call_id)
-        add_data(df, number, name, auth_token, call_id)
+        print("got the id")
+        print("calling to check querry")
+        answer = to_check_querr(call_id,mail)
+        print("checked querry")
+        print("calling add data")
+        dj=add_data(df, number, name, auth_token, call_id)
+        print(dj)
 
         if answer is not None:
-            send_mail(mail, "General Transcript", answer)
+            print("calling send mail")
+            send_mail_querry(mail,"Your Querry is resolved",answer)
+            print("calling create pdf")
             create_pdf(number, answer)
             
         return response_data
@@ -122,3 +122,4 @@ def make_vapi_call(name, number,mail):
     except Exception as e:
         print(f"Unexpected error: {e}")
         return {"error": str(e)}
+make_vapi_call("Siddhatha","+917300608902","siddharthakhandelwal9@gmail.com")

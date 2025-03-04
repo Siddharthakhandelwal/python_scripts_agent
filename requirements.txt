@@ -8,3 +8,4 @@ pydantic
 requests
 numpy
 python-multipart
+pandas

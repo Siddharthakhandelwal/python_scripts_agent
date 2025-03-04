@@ -24,7 +24,6 @@ def add_data(df, phone_number, name, authtokeny,id):
         # Update the existing row
         df.at[idx, 'Name'] = name
         df.at[idx, 'authtoken'] += f" {auth_token}"
-        df.at[idx, 'call back'] = call_back
         df.at[idx, 'summary'] += f" {transcript}"
 
     else:
@@ -33,11 +32,11 @@ def add_data(df, phone_number, name, authtokeny,id):
             'Phone number': phone_number,
             'Name': name,
             'authtoken': auth_token,
-            'call back': call_back,
             'summary': transcript
         }
         # Append the new row to the DataFrame
-        df = df.append(new_data, ignore_index=True)
+        df.loc[len(df)] = new_data
+        # df = df.append(new_data, ignore_index=True)
     return df
 
 

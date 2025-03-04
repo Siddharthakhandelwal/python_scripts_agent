@@ -2,7 +2,7 @@ import requests
 from firecrawl import FirecrawlApp
 from groq import Groq
 import tiktoken
-from whatsapp import create_pdf
+from send_mail import send_mail
 
 def groq_trans_querr(trans):
     groq_api="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"
@@ -89,7 +89,7 @@ def crawl_web(querry):
         return data
 
 
-def to_check_querr(call_id):
+def to_check_querr(call_id,mail):
   auth_token = '277f9672-6826-41e2-8774-c193991b06fd'
   url = f"https://api.vapi.ai/call/{call_id}"
   headers = {
@@ -105,10 +105,14 @@ def to_check_querr(call_id):
     if trans['status'] =='ended' :
       try:
         transcript= trans['transcript']
-        querry = groq_trans_querr(transcript) # type: ignore
+        send_mail(transcript,mail,"Transcript")
+        querry = groq_trans_querr(transcript) 
+        print(querry)# type: ignore
         if querry != "None":
             try:
+                print("web scrapping")
                 answer=crawl_web(querry)
+                print(answer)
                 return answer
             except Exception as e:
                return None
