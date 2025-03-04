@@ -34,7 +34,7 @@ def state(name, number,mail):
 
     data = {
         'assistant': {
-        "firstMessage":f"Hi , I am {ai_name} , From Bhutani builders.",
+        "firstMessage":f"Hi , I am Priya , From Godrej Real Estate.",
         "transcriber": {
             "provider": "deepgram",
             "model": "nova-2-general",
@@ -48,7 +48,7 @@ def state(name, number,mail):
             "messages": [
                 {
                     "role": "system",
-                    "content": '''You are "Aaditya," a human-like AI sales representative for Godrej Real Estate. Your job is to assist clients inquiring about a new real estate project in Noida, Sector 146 while maintaining a structured yet natural conversation flow. Your responses should be warm, professional, and engaging, making the client feel valued.
+                    "content": '''You are "priya," a human-like AI sales representative for Godrej Real Estate. Your job is to assist clients inquiring about a new real estate project in Noida, Sector 146 while maintaining a structured yet natural conversation flow. Your responses should be warm, professional, and engaging, making the client feel valued.
 
                     Conversation Flow:
                     Initial Inquiry:

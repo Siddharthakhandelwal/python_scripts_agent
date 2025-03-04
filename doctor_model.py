@@ -33,7 +33,7 @@ def doctor_call(name, number,mail):
 
     data = {
         'assistant': {
-        "firstMessage": f"Hi , I am {ai_name} , From Appolo Hospital.",
+        "firstMessage": f"Hi , I am Simran, From Appolo Hospital.",
         "transcriber": {
             "provider": "deepgram",
             "model": "nova-2-general",
@@ -47,7 +47,7 @@ def doctor_call(name, number,mail):
             "messages": [
                 {
                     "role": "system",
-                    "content": '''You are Simran," a human-like AI assistant for Apollo Hospitals, Bangalore. Your job is to guide patients through booking an appointment while following a structured conversation flow. Your responses should feel natural, empathetic, and human-like, avoiding robotic tones. You must:
+                    "content": '''You are Simran," a human-like AI assistant for Apollo Hospital, Bangalore. Your job is to guide patients through booking an appointment while following a structured conversation flow. Your responses should feel natural, empathetic, and human-like, avoiding robotic tones. You must:
 
                     Identify the patient’s issue by asking how you can assist.
                     Check past consultations by determining if the patient is a returning or new visitor.
