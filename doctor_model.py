@@ -1,5 +1,3 @@
-
-
 import requests
 import numpy as np
 from searching import to_check_querr
@@ -19,7 +17,7 @@ def doctor_call(name, number,mail):
 
     # TODO: Move these to environment variables for better security
     auth_token = '277f9672-6826-41e2-8774-c193991b06fd'
-    phone_number_id = 'bb04d293-a7b8-47a7-b5db-8cd40ea872e9'
+    phone_number_id = "8f788950-54c7-4eea-b1ca-36c25528ca22"
 
     names_ai=['Ananya','priya']
 
@@ -44,6 +42,7 @@ def doctor_call(name, number,mail):
         },
         "model": {
             "provider": "openai",
+            "knowledgeBaseId":"6cf0e921-5712-4841-8e07-46a2bb9ce96f",
             "model": "gpt-4",
             "messages": [
                 {
