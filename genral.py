@@ -3,8 +3,14 @@ import numpy as np
 from searching import to_check_querr
 import datetime
 from whatsapp import create_pdf
+from send_mail import send_mail
+from datafrmae import add_data
+import pandas as pd
 
-def make_vapi_call(name, number):
+# Initialize the DataFrame with specified columns
+columns = ['Phone number', 'Name', 'authtoken', 'call back','summary']
+df = pd.DataFrame(columns=columns)
+def make_vapi_call(name, number,mail):
     # voice=['s3://voice-cloning-zero-shot/f3c22a65-87e8-441f-aea5-10a1c201e522/original/manifest.json','s3://mockingbird-prod/ayla_vo_expressive_16095e08-b9e8-429b-947c-47a75e41053b/voices/speaker/manifest.json']
 
     voices="FQygEXXdVfjOosF7jzJ7"
@@ -92,7 +98,10 @@ def make_vapi_call(name, number):
             'https://api.vapi.ai/call/phone', headers=headers, json=data)
         print(response.json())
         answer=to_check_querr(response.json()['id'])
+        add_data(df,number, name, auth_token,response.json()['id'])
+
         if answer is not None:
+            send_mail(mail,"Genral Transcript",answer)
             create_pdf(number,answer)
             return response.json()
     except Exception as e:

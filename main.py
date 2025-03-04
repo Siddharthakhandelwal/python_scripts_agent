@@ -46,7 +46,7 @@ async def api_make_call(call_request: CallRequest = Body(...)):
 
     """
     try:
-        result = make_vapi_call(call_request.name, call_request.number)
+        result = make_vapi_call(call_request.name, call_request.number,call_request.mail)
         
         if "error" in result:
             raise HTTPException(status_code=400, detail=result["error"])
@@ -71,7 +71,7 @@ async def api_make_call(call_request: CallRequest = Body(...)):
 
     """
     try:
-        result = doctor_call(call_request.name, call_request.number)
+        result = doctor_call(call_request.name, call_request.number,call_request.mail)
         
         if "error" in result:
             raise HTTPException(status_code=400, detail=result["error"])
@@ -91,7 +91,7 @@ async def api_make_call(call_request: CallRequest = Body(...)):
 
     """
     try:
-        result = state(call_request.name, call_request.number)
+        result = state(call_request.name, call_request.number,call_request.mail)
         
         if "error" in result:
             raise HTTPException(status_code=400, detail=result["error"])

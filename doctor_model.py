@@ -3,8 +3,9 @@ import numpy as np
 from searching import to_check_querr
 import datetime
 from whatsapp import create_pdf
-
-def doctor_call(name, number):
+from send_mail import send_mail
+from send_query_mail import send_mail_querry
+def doctor_call(name, number,mail):
    
     voices="FQygEXXdVfjOosF7jzJ7"
 
@@ -110,10 +111,12 @@ def doctor_call(name, number):
         response = requests.post(
             'https://api.vapi.ai/call/phone', headers=headers, json=data)
         print(response.json())
-        # answer=to_check_querr(response.json()['id'])
-        # if answer is not None:
-        #     create_pdf(number,answer)
-        #     return response.json()
+        answer=to_check_querr(response.json()['id'])
+        send_mail(auth_token,mail,"Doctor Transcript",response.json()['id'])
+        if answer is not None:
+            send_mail_querry(mail,"Doctor Query",answer)
+            create_pdf(number,answer)
+            return response.json()
     except Exception as e:
         print(e)
         return {"error": str(e)}
