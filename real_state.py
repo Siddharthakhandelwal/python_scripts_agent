@@ -7,6 +7,7 @@ from send_mail import send_mail
 def state(name, number,mail):
     voices="FQygEXXdVfjOosF7jzJ7"
 
+    # TODO: Move these to environment variables for better security
     auth_token = '277f9672-6826-41e2-8774-c193991b06fd'
     phone_number_id = 'bb04d293-a7b8-47a7-b5db-8cd40ea872e9'
 
@@ -99,12 +100,27 @@ def state(name, number,mail):
     try:
         response = requests.post(
             'https://api.vapi.ai/call/phone', headers=headers, json=data)
-        print(response.json())
-        answer=to_check_querr(response.json()['id'])
-        send_mail(mail,"real state Transcript", answer)
+        
+        response_data = response.json()
+        print(response_data)
+        
+        if not response.ok:
+            return {"error": f"API request failed: {response_data.get('error', 'Unknown error')}"}
+            
+        call_id = response_data.get('id')
+        if not call_id:
+            return {"error": "No call ID in response"}
+            
+        answer = to_check_querr(call_id)
+        send_mail(mail, "Real Estate Transcript", answer)
+        
         if answer is not None:
-            create_pdf(number,answer)
-            return response.json()
+            create_pdf(number, answer)
+            
+        return response_data
+    except requests.RequestException as e:
+        print(f"Request error: {e}")
+        return {"error": f"Network error: {str(e)}"}
     except Exception as e:
-        print(e)
+        print(f"Unexpected error: {e}")
         return {"error": str(e)}
